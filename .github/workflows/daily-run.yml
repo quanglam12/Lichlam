@@ -1,0 +1,22 @@
+name: Run Script Daily
+
+on:
+  schedule:
+    # Định dạng cron: phút giờ ngày-tháng tháng ngày-trong-tuần
+    - cron: '0 0 * * *'  # Chạy vào lúc 00:00 UTC mỗi ngày
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'  # Hoặc phiên bản Node.js bạn đang sử dụng
+
+      - name: Run script
+        run: auto.js
