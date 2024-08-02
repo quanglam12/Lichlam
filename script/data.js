@@ -171,6 +171,17 @@ window.createTable = async function createTable(){
                         const buttonF = document.createElement('button')
                             buttonF.setAttribute('id',"B-" + docday.id + "-"+ id)
                             buttonF.setAttribute('onclick', 'changemore(this.id)')
+                        const buttonFoff = document.createElement('button')
+                            buttonFoff.setAttribute("id", "Off" + "-" + docday.id + "-" + id)
+                            buttonFoff.setAttribute('onclick', 'changeoff(this.id)')
+
+                        if (date.off == true){
+                            buttonFoff.textContent = "On"
+                            buttonFoff.setAttribute("class", "off")
+                        }
+                        else {
+                            buttonFoff.textContent = "Off"
+                        }
 
                         const div1 = document.createElement('div')
 
@@ -213,6 +224,7 @@ window.createTable = async function createTable(){
                         }
                    
                     th.appendChild(buttonF)
+                    th.appendChild(buttonFoff)
                     row.appendChild(th)
                     })
                     
@@ -258,6 +270,17 @@ window.createTable = async function createTable(){
                     const buttonF = document.createElement('button')
                         buttonF.setAttribute('id',"B-" + docday.id + "-"+ id)
                         buttonF.setAttribute('onclick', 'changemore(this.id)')
+                    const buttonMoff = document.createElement('button')
+                    buttonMoff.setAttribute("id", "Off" + "-"+ docday.id + "-" + id)
+                    buttonMoff.setAttribute('onclick', 'changeoff(this.id)')
+
+                    if (date.off == true){
+                        buttonMoff.textContent = "On"
+                        buttonMoff.setAttribute("class", "off")
+                    }
+                    else {
+                        buttonMoff.textContent = "Off"
+                    }
 
                     const div1 = document.createElement('div')
 
@@ -301,7 +324,7 @@ window.createTable = async function createTable(){
 
                 
                 th.appendChild(buttonF)
-
+                th.appendChild(buttonMoff)
                 row.appendChild(th)
                 })
                 tbodyMale.appendChild(row)
@@ -345,17 +368,17 @@ window.changemore = async function changemore(buttonid){
 
 
     if (getday.data().more == true){
+        but.textContent = "+"
         await updateDoc(doc(db, checkFM, info[2], "schedules", getday.id),{
             more : false
-        })
-        but.textContent = "+"
+        })        
     }
     else {
+        but.textContent = "-"
         await updateDoc(doc(db, checkFM, info[2], "schedules", getday.id), {
             more : true
         })
-        but.textContent = "-"
-    }
+            }
     location.reload()
 }
 
@@ -390,4 +413,35 @@ window.saveschedule = async function saveschedule(saveid){
     }
     const name = await getDoc(doc(db, checkFM, sid[1]))
     alert("Đã lưu lịch làm của " + name.data().name)
+}
+window.changeoff = async function changeoff(buttonID) {
+    var info = buttonID.split('-')
+    const but = document.getElementById(buttonID)
+    var checkFM
+    if (info[2] < 100){
+        checkFM = "Datafemale"
+    }
+    else {
+        checkFM = "Datamale"
+    }
+    const querydays = await getDocs(collection(doc(db, checkFM, info[2]), "schedules"))
+    const getday = querydays.docs[info[1]]
+
+
+    if (getday.data().off == true){
+         but.textContent = "On"
+        await updateDoc(doc(db, checkFM, info[2], "schedules", getday.id),{
+            off : false
+        })
+       
+    }
+    else {
+        but.textContent = "Off"
+        but.setAttribute('class', "on")
+        await updateDoc(doc(db, checkFM, info[2], "schedules", getday.id), {
+            off : true
+        })
+        
+    }
+    location.reload()
 }
