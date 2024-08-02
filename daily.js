@@ -1,7 +1,6 @@
+const { initializeApp } = require('firebase/app');
+const { getFirestore, collection, getDocs, getDoc, updateDoc, doc } = require('firebase/firestore');
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-import { getFirestore,  collection, getDocs, addDoc, doc, updateDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
-    
 const firebaseConfig = {
   apiKey: "AIzaSyBVF77T6TcOjpvO6fIeXgvEmuBLAqFyf1k",
   authDomain: "data-ddc19.firebaseapp.com",
@@ -40,6 +39,7 @@ async function autochangeday(){
       start2 : 0,
       end2 : 0
   })
+  console.log("Female OK")
     
   }
 
@@ -66,6 +66,7 @@ async function autochangeday(){
       start2 : 0,
       end2 : 0
   })
+  console.log("Male OK")
     
   }
 
