@@ -1,6 +1,7 @@
 name: Run Script Daily
 
 on:
+  workflow_dispatch:
   schedule:
     # Định dạng cron: phút giờ ngày-tháng tháng ngày-trong-tuần
     - cron: '0 0 * * *'  # Chạy vào lúc 00:00 UTC mỗi ngày
