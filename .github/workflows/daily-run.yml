@@ -17,6 +17,9 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '14'  # Hoặc phiên bản Node.js bạn đang sử dụng
-
+      - name: Install fire store
+        run: npm install firebase @firebase/firestore
+      - name: Install fire app
+        run: npm install firebase @firebase/app
       - name: Run script
-        run: auto.js
+        run: node daily.js
