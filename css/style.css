@@ -29,30 +29,92 @@ body {
     background-color: greenyellow;
 }
 
-table {
+#table-schedules thead th {
+    position: -webkit-sticky; 
+    position: sticky;
+    top: 0; 
+    background-color: #f4f4f4; 
+    z-index: 10; 
+}
+
+#table-schedules {
     width: 100%;
     border-collapse: collapse;
+    font-family: Arial, sans-serif;
 }
 
-th, td {
-    border: 1px solid #dddddd;
-    text-align: center;
-    padding: 8px;
-}
-
-th {
-    background-color: #f2f2f2;
-}
-.gender {
-    background-color: gray;
-}
-.gender td {
-    padding-left: 60px;
-    text-align: left;
+#table-schedules thead {
+    background-color: #f4f4f4;
     font-weight: bold;
-    
-     
 }
-.femalerow {
-    background: green;
+
+#table-schedules th {
+    border: 1px solid #ddd;
+    padding: 8px;
+    align-items: center; 
+    justify-content: center; 
+    text-align: center; 
+
+}
+
+#table-schedules tbody tr {
+    border-bottom: 1px solid #ddd;
+}
+
+#table-schedules td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+th.name button {
+    margin-left: 8px;
+    background-color: #4c7daf;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.table-bodyFemale .femalerow,
+.table-bodyMale .malerow {
+    background-color: #e2e2e2;
+    font-weight: bold;
+    text-align: center;
+}
+
+#table-schedules div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#table-schedules input[type="time"] {
+    margin: 4px 0;
+}
+
+#table-schedules div button {
+    margin-top: 4px;
 }
