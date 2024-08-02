@@ -152,6 +152,7 @@ window.createTable = async function createTable(){
                     const row = document.createElement('tr')
                         row.setAttribute('id', id)
                     const th = document.createElement('th')
+                        th.setAttribute('class', "name")
                         th.textContent = name
                         const savebuttonF = document.createElement('button')
                         savebuttonF.textContent = "Lưu"
@@ -238,6 +239,7 @@ window.createTable = async function createTable(){
                 const row = document.createElement('tr')
                     row.setAttribute('id', id)
                 const th = document.createElement('th')
+                    th.setAttribute('class', "name")
                     th.textContent = name
                     const savebuttonF = document.createElement('button')
                     savebuttonF.textContent = "Lưu"
