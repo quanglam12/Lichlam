@@ -1,306 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
-    <script src="https://cdn.jsdelivr.net/npm/backendless@6.6.0/dist/backendless.min.js"></script>
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kiểm tra lịch làm việc</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/manage.css">
 </head>
-<body onload = "createTable()">
+<body>
     <h1>Lịch làm việc</h1>
     <div class="tabs">
         <a href="Dangkylichlam.html" class="tablink">Nhân Viên</a>
         <a href="" class="tablink active">Quản Lý</a>
     </div>
     
-    <div class='scoreboard' id = 'table'></div>
+    <main>
+        <div class="condition">
+            <div class = "timecon">
+                <!--
+                <label for="timestart">Bắt đầu</label>
+                    <select name="time" id="timestart">
+                        <option value="7" selected>7:00</option>
+                        <option value="8">8:00</option>
+                        <option value="9">9:00</option>
+                        <option value="10">10:00</option>
+                        <option value="11">11:00</option>
+                        <option value="12">12:00</option>
+                        <option value="13">13:00</option>
+                        <option value="14">14:00</option>
+                        <option value="15">15:00</option>
+                        <option value="16">16:00</option>
+                        <option value="17">17:00</option>
+                        <option value="18">18:00</option>
+                        <option value="19">19:00</option>
+                        <option value="20">20:00</option>
+                    </select>
+                <label for="timeend">Kết thúc</label>
+                    <select name="time" id="timeend">
+                        <option value="10">10:00</option>
+                        <option value="11">11:00</option>
+                        <option value="12">12:00</option>
+                        <option value="13">13:00</option>
+                        <option value="14">14:00</option>
+                        <option value="15">15:00</option>
+                        <option value="16">16:00</option>
+                        <option value="17">17:00</option>
+                        <option value="18">18:00</option>
+                        <option value="19">19:00</option>
+                        <option value="20">20:00</option>
+                        <option value="21">21:00</option>
+                        <option value="22">22:00</option>
+                        <option value="23" selected>23:00</option>
+                    </select>
+                -->
+                <label for="gender">Vị trí</label>
+                    <select name="sex" id="gender">
+                        <option value="all" selected>All</option>
+                        <option value="female">Female</option>
+                        <option value="male">Male</option>
+                    </select>
+                <button onclick="queryclick()">Xác nhận</button>
+            </div>
+        </div>
+        <div id="schedule-container">
+            <div class ="tabdays" id ="tabdays">
+                
+            </div>
+            <div class= 'timeline'>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Giờ</th>
+                            <th>7:00</th>
+                            <th>8:00</th>
+                            <th>9:00</th>
+                            <th>10:00</th>
+                            <th>11:00</th>
+                            <th>12:00</th>
+                            <th>13:00</th>
+                            <th>14:00</th>
+                            <th>15:00</th>
+                            <th>16:00</th>
+                            <th>17:00</th>
+                            <th>18:00</th>
+                            <th>19:00</th>
+                            <th>20:00</th>
+                            <th>21:00</th>
+                            <th>22:00</th>
+                            <th>23:00</th>
+                        </tr>
+                    </thead>
+                    <tbody id = "tableFemale">
+                        <tr>
+                            <th colspan="18">Female</th>
+                        </tr>
 
+                    </tbody>
+                    <tbody id ="tableMale">
+                        <tr>
+                            <th colspan="18">Male</th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
     
 </body>
 
+  <script type="module" src="../script/manager.js"></script>
   <script>
-    const currentDate = new Date()
-    const displayDate = 7 // Days display
 
-    Backendless.initApp("6C630ECF-819C-41F1-81B5-A840DA75EA51", "24D2A3B7-A717-4248-AF15-EC57826D9A78"); // BackendLess API
-
-function createTable(){
-    const table = document.createElement('table') //Tạo bảng
-        table.setAttribute('id', "table-schedules")
-
-    const thead = document.createElement('thead') // Ngày tháng năm
-        thead.setAttribute('class', 'headRow')
-        const headerRow = document.createElement('tr')
-        const headth = document.createElement('th')
-            headth.textContent = 'Ngày'
-            headerRow.appendChild(headth)
-
-            for (let index = 0; index < displayDate; index++) {
-                const iDate = new Date(currentDate);
-                iDate.setDate(currentDate.getDate() + index);
-                const th = document.createElement('th')
-                th.setAttribute("id",index)
-                th.textContent = iDate.toLocaleDateString()
-                headerRow.appendChild(th)
-                
-            }
-
-    const tbodyFemale = document.createElement('tbody')
-        tbodyFemale.setAttribute('class', 'table-bodyFemale')
-        const FemaleRow = document.createElement('tr')
-        const Femaleth = document.createElement('th')
-            Femaleth.setAttribute('class',"femalerow")
-            Femaleth.setAttribute('colspan',displayDate + 1)
-            Femaleth.textContent = "Female"
-            FemaleRow.appendChild(Femaleth)
-
-            const queryFemale = Backendless.DataQueryBuilder.create(); 
-            queryFemale.setWhereClause("gender = 'female'");       
-            //Query condition    
-            
-            Backendless.Data.of("employees").find(queryFemale)
-            .then((employees) => {
-                console.log("Female Employees:", employees);
-                employees.forEach(employee => {
-                    console.log(`ID: ${employee.userID}, Name: ${employee.name}, Gender: ${employee.gender}`);
-                    const row = document.createElement('tr')
-                        row.setAttribute('id', employee.userID)
-                    const th = document.createElement('th')
-                        th.textContent = employee.name
-                        row.appendChild(th)
-
-                            const queryday = Backendless.DataQueryBuilder.create(); 
-                            queryday.setWhereClause(`userID = '${employee.userID}'`);
-                            queryday.setSortBy(["day ASC"]);
-                            console.log(employee.userID)
-                            Backendless.Data.of("schedules").find(queryday)
-                            .then((days) => {
-                                console.log("Days:", days);
-                                days.forEach(day => {
-                                    const th = document.createElement('th')
-                                    th.setAttribute("id", employee.userID + "-" + day.day)
-
-                                    const buttonF = document.createElement('button')
-                                    buttonF.setAttribute('id', day.day + "-"+ employee.userID)
-
-                                    const div1 = document.createElement('div')
-                                        const timestart1 = document.createElement('input')
-                                        timestart1.type = "time"
-                                        timestart1.value = inttotime(day.start1)
-                                        
-                                        const separator = document.createTextNode(" - ")
-
-                                        const timeend1 = document.createElement('input')
-                                        timeend1.type = "time"
-                                        timeend1.value = inttotime(day.end1)
-
-                                        div1.appendChild(timestart1)
-                                        div1.appendChild(separator)
-                                        div1.appendChild(timeend1)
-
-                                    th.appendChild(div1)
-                                    
-                                    if(day.more == true){
-                                        const div2 = document.createElement('div')
-                                        const timestart2 = document.createElement('input')
-                                        timestart2.type = "time"
-                                        timestart2.value = inttotime(day.start2)
-
-                                        const separator = document.createTextNode(" - ")
-
-                                        const timeend2 = document.createElement('input')
-                                        timeend2.type = "time"
-                                        timeend2.value = inttotime(day.end2)
-
-                                        buttonF.textContent = "-"
-
-                                    div2.appendChild(timestart2)
-                                    div2.appendChild(separator)
-                                    div2.appendChild(timeend2)
-
-                                    th.appendChild(div2)
-                                    } else{
-                                        buttonF.textContent = "+"
-                                    }
-
-                                    
-                                    buttonF.setAttribute('onclick', 'changemore(this.id)')
-                                    
-                                    th.appendChild(buttonF)
-
-                                    row.appendChild(th)
-                                });
-                            })
-                            .catch((error) => {
-                                console.error("Error:", error);
-                            });
-                    tbodyFemale.appendChild(row)
-                    });
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            });
-
-
-    const tbodyMale = document.createElement('tbody')
-        tbodyMale.setAttribute('class', 'table-bodyMale')
-        const MaleRow = document.createElement('tr')
-        const Maleth = document.createElement('th')
-            Maleth.setAttribute('class',"malerow")
-            Maleth.setAttribute('colspan',displayDate + 1)
-            Maleth.textContent = "Male"
-            MaleRow.appendChild(Maleth)
-
-        const queryMale = Backendless.DataQueryBuilder.create(); 
-        queryMale.setWhereClause("gender = 'male'");       
-        //Query condition    
-        
-        Backendless.Data.of("employees").find(queryMale)
-        .then((employees) => {
-            console.log("Male Employees:", employees);
-            employees.forEach(employee => {
-                console.log(`ID: ${employee.userID}, Name: ${employee.name}, Gender: ${employee.gender}`);
-                const row = document.createElement('tr')
-                    row.setAttribute('id', employee.userID)
-                const th = document.createElement('th')
-                    th.textContent = employee.name
-                    row.appendChild(th)
-
-                        const queryday = Backendless.DataQueryBuilder.create(); 
-                        queryday.setWhereClause(`userID = '${employee.userID}'`);
-                        queryday.setSortBy(["day ASC"]);
-                        console.log(employee.userID)
-                        Backendless.Data.of("schedules").find(queryday)
-                        .then((days) => {
-                            console.log("Days:", days);
-                            days.forEach(day => {
-                                const th = document.createElement('th')
-                                th.setAttribute("id", employee.userID + "-" + day.day)
-
-                                const buttonF = document.createElement('button')
-                                    buttonF.setAttribute('id', day.day + "-"+ employee.userID)
-                                
-                                const div1 = document.createElement('div')
-                                    const timestart1 = document.createElement('input')
-                                    timestart1.type = "time"
-                                    timestart1.value = inttotime(day.start1)
-                                    
-                                    const separator = document.createTextNode(" - ")
-
-                                    const timeend1 = document.createElement('input')
-                                    timeend1.type = "time"
-                                    timeend1.value = inttotime(day.end1)
-
-                                    div1.appendChild(timestart1)
-                                    div1.appendChild(separator)
-                                    div1.appendChild(timeend1)
-
-                                th.appendChild(div1)
-                                
-                                if(day.more == true){
-                                    const div2 = document.createElement('div')
-                                    const timestart2 = document.createElement('input')
-                                    timestart2.type = "time"
-                                    timestart2.value = inttotime(day.start2)
-
-                                    const separator = document.createTextNode(" - ")
-
-                                    const timeend2 = document.createElement('input')
-                                    timeend2.type = "time"
-                                    timeend2.value = inttotime(day.end2)
-
-                                    buttonF.textContent = "-"
-
-                                div2.appendChild(timestart2)
-                                div2.appendChild(separator)
-                                div2.appendChild(timeend2)
-
-                                th.appendChild(div2)
-                                } else{
-                                    buttonF.textContent = "+"
-                                }
-
-                                buttonF.setAttribute('onclick', 'changemore(this.id)')
-                                th.appendChild(buttonF)
-
-                                row.appendChild(th)
-                            });
-                        })
-                        .catch((error) => {
-                            console.error("Error:", error);
-                        });
-                tbodyMale.appendChild(row)
-                });
-        })
-        .catch((error) => {
-            console.error("Error:", error);
-        });
-
-    thead.appendChild(headerRow)
-    tbodyFemale.appendChild(FemaleRow)
-    tbodyMale.appendChild(MaleRow)
-
-    table.appendChild(thead)
-    table.appendChild(tbodyFemale)
-    table.appendChild(tbodyMale)
-
-    const addtable = document.getElementById("table")
-    addtable.appendChild(table)
-}
-
-function inttotime(inttime){
-    const time = `${inttime < 10 ? '0' : ''}${inttime}:00`;
-return time
-}
-
-function timetoint(time){
-    const hour = parseInt(time.split(":")[0], 10)
-return hour
-}
-
-function changemore(butid){
-    var info = butid.split('-')
-    const but = document.getElementById(butid)
-    const queryMore = Backendless.DataQueryBuilder.create();
-    queryMore.setWhereClause(`userid = ${info[1]} AND day = ${info[0]}`);
-
-    Backendless.Data.of("schedules").find(queryMore)
-  .then((employees) => {
-    console.log("Employees found:", employees);
-
-    if (employees.length > 0) {
-      employees.forEach(employee => {
-        if (employee.more == true){
-            employee.more = false
-            but.textContent = "+"
-        }
-        else {
-            employee.more = true
-            but.textContent = "-"
-        }
-
-        
-        Backendless.Data.of("schedules").save(employee)
-          .then((updatedEmployee) => {
-            console.log("Employee updated:", updatedEmployee);
-          })
-          .catch((error) => {
-            console.error("Error updating employee:", error);
-          });
-      });
-    } else {
-      console.log("No employees found with the specified criteria.");
-    }
-  })
-  .catch((error) => {
-    console.error("Error fetching employees:", error);
-  });
-  setTimeout(function() {
-    location.reload();
-}, 1100);
-}
   </script>
 
 </html>
