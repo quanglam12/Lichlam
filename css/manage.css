@@ -1,0 +1,122 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+.tabs {
+    overflow: hidden;
+    border-bottom: 1px solid #ccc;
+}
+
+.tablink {
+    background-color: #f1f1f1;
+    color: black;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+    text-decoration: none;
+}
+
+.tablink:hover {
+    background-color: #ddd;
+}
+
+.tablink.active {
+    background-color: greenyellow;
+}
+
+.tabdays {
+    display: flex;
+    justify-content: space-around;
+    background-color: #f8f8f8;
+    border-bottom: 2px solid #ddd;
+    padding: 0.5rem;
+    border-radius: 8px 8px 0 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+}
+.tabdays a {
+    flex: 1;
+    text-align: center;
+    padding: 1rem;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+.tabdays a:hover {
+    background-color: #1f7728;
+    color: white;
+}
+
+.tabdays a.active {
+    background-color: #08552d;
+    color: white;
+    border: 2px solid black;
+    cursor: default;
+    padding-right:5px ;
+}
+.condition {
+    background-color: #f9f9f9; 
+    padding: 5px;            
+    border-radius: 10px;      
+    width: 300px;              
+    margin: 5px auto;       
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.timecon {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.timecon label {
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: #333;
+}
+.timecon select {
+    padding: 8px;
+    font-size: 18px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+    width: 150px;
+    cursor: pointer;
+}
+.timecon button {
+    padding: 10px 15px;
+    font-size: 14px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.timecon button:hover {
+    background-color: #0056b3;
+}
+table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+th, td {
+border: 1px solid #ddd;
+padding: 8px;
+text-align: center;
+}
+
+th {
+background-color: #f2f2f2;
+}
+.canwork {
+    background-color: #1f7728;
+}
+  
