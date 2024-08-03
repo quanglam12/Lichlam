@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   schedule:
     # Định dạng cron: phút giờ ngày-tháng tháng ngày-trong-tuần
-    - cron: '0 7 * * *'  # Chạy vào lúc 00:00 UTC +7 mỗi ngày
+    - cron: '0 17 * * *'  # Chạy vào lúc 00:00 UTC +7 mỗi ngày
 
 jobs:
   run-script:
