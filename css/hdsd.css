@@ -1,0 +1,38 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+p {
+    margin-bottom: 1em;
+}
+
+strong {
+    color: #007bff; 
+}
+
+em {
+    font-style: italic;
+    color: #666;
+}
+img {
+    display: block;
+    width: 70%;
+    height: 80%;
+    margin: 10px 0;
+}
+.instruction-section {
+    margin-bottom: 2em;
+}
+
+.instruction-section h2 {
+    color: #0056b3; 
+    border-bottom: 2px solid #0056b3;
+    padding-bottom: 5px;
+}
+
+.note {
+    border-left: 4px solid #007bff;
+    padding-left: 15px;
+    margin: 10px 0;
+    background-color: #f9f9f9;
+}
