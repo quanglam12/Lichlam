@@ -62,8 +62,13 @@ async function querydatatime(queryday) {
                 if(querydataday.data().start1 > 7){
                     timestart1 = querydataday.data().start1
                 }
-                if((querydataday.data().end1 == 0) || (querydataday.data().end1 <= 23)){
+                if(querydataday.data().end1 <= 23){
+                    if(querydataday.data().end1 == 0){
+                        timeend1 = 23
+                    }
+                    else{
                     timeend1 = querydataday.data().end1
+                    }
                 }
                 if(timeend1 <8){
                     timeend1 = 7
@@ -72,8 +77,13 @@ async function querydatatime(queryday) {
                     if(querydataday.data().start2 > 7){
                         timestart2 = querydataday.data().start2
                     }
-                    if((querydataday.data().end2 == 0) || (querydataday.data().end2 <= 23)){
+                    if(querydataday.data().end2 <= 23){
+                        if(querydataday.data().end2 == 0){
+                            timeend2 = 23
+                        }
+                        else{
                         timeend2 = querydataday.data().end2
+                        }
                     }
                     if(timeend2 <8){
                         timeend2 = 7
@@ -84,15 +94,20 @@ async function querydatatime(queryday) {
                 
                 for (let index = 0; index < times; index++) {
                     const td = document.createElement('td')
-                    if((timestart1 - 7 == index) && (timeend1 - 7 > index)){
-                        td.setAttribute("class", "canwork")
-                        ++timestart1
-                    }
-                    if(querydataday.data().more == true){
-                        if((timestart2 - 7 == index) && (timeend2 - 7 > index)){
+                    if (querydataday.data().off == false){
+                        if((timestart1 - 7 == index) && (timeend1 - 7 > index)){
                             td.setAttribute("class", "canwork")
-                            ++timestart2
+                            ++timestart1
                         }
+                        if(querydataday.data().more == true){
+                            if((timestart2 - 7 == index) && (timeend2 - 7 > index)){
+                                td.setAttribute("class", "canwork")
+                                ++timestart2
+                            }
+                        }
+                    }
+                    else{
+                        td.setAttribute("class", "cantwork")
                     }
                     trFemale.appendChild(td)
                     
@@ -117,8 +132,13 @@ async function querydatatime(queryday) {
                 if(querydataday.data().start1 > 7){
                     timestart1 = querydataday.data().start1
                 }
-                if((querydataday.data().end1 == 0) || (querydataday.data().end1 <= 23)){
+                if(querydataday.data().end1 <= 23){
+                    if(querydataday.data().end1 == 0){
+                        timeend1 = 23
+                    }
+                    else{
                     timeend1 = querydataday.data().end1
+                    }
                 }
                 if(timeend1 <8){
                     timeend1 = 7
@@ -127,8 +147,13 @@ async function querydatatime(queryday) {
                     if(querydataday.data().start2 > 7){
                         timestart2 = querydataday.data().start2
                     }
-                    if((querydataday.data().end2 == 0) || (querydataday.data().end2 <= 23)){
+                    if(querydataday.data().end2 <= 23){
+                        if(querydataday.data().end2 == 0){
+                            timeend2 = 23
+                        }
+                        else{
                         timeend2 = querydataday.data().end2
+                        }
                     }
                     if(timeend2 <8){
                         timeend2 = 7
@@ -139,15 +164,20 @@ async function querydatatime(queryday) {
                 
                 for (let index = 0; index < times; index++) {
                     const td = document.createElement('td')
-                    if((timestart1 - 7 == index) && (timeend1 - 7 > index)){
-                        td.setAttribute("class", "canwork")
-                        ++timestart1
-                    }
-                    if(querydataday.data().more == true){
-                        if((timestart2 - 7 == index) && (timeend2 - 7 > index)){
+                    if (querydataday.data().off == false){
+                        if((timestart1 - 7 == index) && (timeend1 - 7 > index)){
                             td.setAttribute("class", "canwork")
-                            ++timestart2
+                            ++timestart1
                         }
+                        if(querydataday.data().more == true){
+                            if((timestart2 - 7 == index) && (timeend2 - 7 > index)){
+                                td.setAttribute("class", "canwork")
+                                ++timestart2
+                            }
+                        }
+                    }
+                    else{
+                        td.setAttribute("class", "cantwork")
                     }
                     trMale.appendChild(td)
                     
