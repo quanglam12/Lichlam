@@ -106,7 +106,7 @@ async function querydatatime(queryday) {
 
         const rowsHtml = (await Promise.all(schedulesPromises)).join('');
 
-        tableFemale.innerHTML = rowsHtml;
+        tableFemale.innerHTML += rowsHtml;
     }
 
     if((querygender == "all") || (querygender == "male")){
@@ -164,7 +164,7 @@ async function querydatatime(queryday) {
 
         const rowsHtml = (await Promise.all(schedulesPromises)).join('');
 
-        tableMale.innerHTML = rowsHtml;
+        tableMale.innerHTML += rowsHtml;
     }
 }
 
