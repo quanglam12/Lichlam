@@ -108,23 +108,50 @@ body {
 table {
     border-collapse: collapse;
     width: 100%;
-  }
-  
-th, td {
-border: 1px solid #ddd;
-padding: 8px;
-text-align: center;
 }
 
-th {
-background-color: #f2f2f2;
+thead {
+    background-color: #f4f4f4;
+    position: sticky;
+    top: 0;
+    z-index: 1;
 }
+th {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    box-sizing: border-box;
+    background-color: #f2f2f2;
+}
+td:first-child{
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    background-color: #fff; 
+    padding: 12px 8px 12px 8px;
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
+    border-left: 2px solid black;
+}
+td {
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    padding: 0;
+}
+
 .canwork {
     background-color: #1f7728;
+    display: block;
+    min-height: 10px;
+    padding: 5px 0px 5px 0px;
 }
 .cantwork {
     background-color: #ff0000;
+    display: block;
+    min-height: 10px;
+    padding: 5px 0px 5px 0px;
+
 }
 
-
-  
