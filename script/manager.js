@@ -77,21 +77,23 @@ async function querydatatime(queryday) {
 
             const tdCells = Array.from({ length: times }, (_, index) => {
                 const td = document.createElement('td');
+                const div = document.createElement('div')
                 
                 if (scheduleData.off === false) {
                     if ((timestart1 - 7 === index) && (timeend1 - 7 > index)) {
-                        td.setAttribute("class", "canwork");
+                        div.setAttribute("class", "canwork");
                         ++timestart1;
                     }
                     if (scheduleData.more === true) {
                         if ((timestart2 - 7 === index) && (timeend2 - 7 > index)) {
-                            td.setAttribute("class", "canwork");
+                            div.setAttribute("class", "canwork");
                             ++timestart2;
                         }
                     }
                 } else {
-                    td.setAttribute("class", "cantwork");
+                    div.setAttribute("class", "cantwork");
                 }
+                td.appendChild(div)
 
                 return td.outerHTML;
             }).join('');
@@ -100,7 +102,7 @@ async function querydatatime(queryday) {
                 <tr class="classmember">
                     <td>${name}</td>
                     ${tdCells}
-                </tr>
+                </tr>ㅤ
             `;
         });
 
@@ -135,21 +137,23 @@ async function querydatatime(queryday) {
 
             const tdCells = Array.from({ length: times }, (_, index) => {
                 const td = document.createElement('td');
+                const div = document.createElement('div')
                 
                 if (scheduleData.off === false) {
                     if ((timestart1 - 7 === index) && (timeend1 - 7 > index)) {
-                        td.setAttribute("class", "canwork");
+                        div.setAttribute("class", "canwork");
                         ++timestart1;
                     }
                     if (scheduleData.more === true) {
                         if ((timestart2 - 7 === index) && (timeend2 - 7 > index)) {
-                            td.setAttribute("class", "canwork");
+                            div.setAttribute("class", "canwork");
                             ++timestart2;
                         }
                     }
                 } else {
-                    td.setAttribute("class", "cantwork");
+                    div.setAttribute("class", "cantwork");
                 }
+                td.appendChild(div)
 
                 return td.outerHTML;
             }).join('');
@@ -158,7 +162,7 @@ async function querydatatime(queryday) {
                 <tr class="classmember">
                     <td>${name}</td>
                     ${tdCells}
-                </tr>
+                </tr>ㅤ
             `;
         });
 
@@ -169,7 +173,7 @@ async function querydatatime(queryday) {
 }
 
 window.queryclick = async function queryclick() {
-    const tab = document.querySelector('.tabdays a.active');
+    const tab = document.querySelector('.tabdays a.active')
     querydatatime(tab.id)
 }
 
