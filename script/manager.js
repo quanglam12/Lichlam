@@ -26,7 +26,12 @@ function createTabday(){
         day.setDate(currentDate.getDate() + index)
         const tabday = document.createElement("a")
         tabday.setAttribute('id', index)
+        const weekDayDiv = document.createElement("div")
+            const em = document.createElement("em")
+            em.textContent = day.toLocaleDateString('vi-VN', { weekday: 'long' })
+            weekDayDiv.appendChild(em)
         tabday.textContent = day.toLocaleDateString()
+        tabday.appendChild(weekDayDiv)
         tab.appendChild(tabday)
     }
     const t = document.getElementById("gender")
@@ -48,142 +53,118 @@ async function querydatatime(queryday) {
                 })
     if((querygender == "all") || (querygender == "female")){
         const queryDataFemale = await getDocs(collection(db, "Datafemale"));
-            queryDataFemale.forEach(async (female) => {
-                const trFemale = document.createElement("tr")
-                    trFemale.setAttribute('class', "classmember")
-                const tdFemale = document.createElement("td")
-                    tdFemale.textContent = female.data().name
-                trFemale.appendChild(tdFemale)
 
-                const querydataday = await getDoc(doc(db,"Datafemale", female.id, "schedules", queryday ))
-                var timestart1 = 7, timestart2 = 0
-                var timeend1 = 23, timeend2 = 0
+        const schedulesPromises = queryDataFemale.docs.map(async (female) => {
+            const data = female.data();
+            const femaleId = female.id;
+            const name = data.name;
+            
+            const scheduleDoc = await getDoc(doc(db, "Datafemale", femaleId, "schedules", queryday));
+            const scheduleData = scheduleDoc.data();
+
+            let timestart1 = 7, timestart2 = 0;
+            let timeend1 = 23, timeend2 = 0;
+
+            if (scheduleData.start1 > 7) timestart1 = scheduleData.start1;
+            if (scheduleData.end1 <= 23) timeend1 = scheduleData.end1 === 0 ? 23 : scheduleData.end1;
+            if (timeend1 < 8) timeend1 = 7;
+            
+            if (scheduleData.more === true) {
+                if (scheduleData.start2 > 7) timestart2 = scheduleData.start2;
+                if (scheduleData.end2 <= 23) timeend2 = scheduleData.end2 === 0 ? 23 : scheduleData.end2;
+                if (timeend2 < 8) timeend2 = 7;
+            }
+
+            const tdCells = Array.from({ length: times }, (_, index) => {
+                const td = document.createElement('td');
                 
-                if(querydataday.data().start1 > 7){
-                    timestart1 = querydataday.data().start1
-                }
-                if(querydataday.data().end1 <= 23){
-                    if(querydataday.data().end1 == 0){
-                        timeend1 = 23
+                if (scheduleData.off === false) {
+                    if ((timestart1 - 7 === index) && (timeend1 - 7 > index)) {
+                        td.setAttribute("class", "canwork");
+                        ++timestart1;
                     }
-                    else{
-                    timeend1 = querydataday.data().end1
-                    }
-                }
-                if(timeend1 <8){
-                    timeend1 = 7
-                }
-                if(querydataday.data().more == true){
-                    if(querydataday.data().start2 > 7){
-                        timestart2 = querydataday.data().start2
-                    }
-                    if(querydataday.data().end2 <= 23){
-                        if(querydataday.data().end2 == 0){
-                            timeend2 = 23
-                        }
-                        else{
-                        timeend2 = querydataday.data().end2
+                    if (scheduleData.more === true) {
+                        if ((timestart2 - 7 === index) && (timeend2 - 7 > index)) {
+                            td.setAttribute("class", "canwork");
+                            ++timestart2;
                         }
                     }
-                    if(timeend2 <8){
-                        timeend2 = 7
-                    }
-
+                } else {
+                    td.setAttribute("class", "cantwork");
                 }
 
-                
-                for (let index = 0; index < times; index++) {
-                    const td = document.createElement('td')
-                    if (querydataday.data().off == false){
-                        if((timestart1 - 7 == index) && (timeend1 - 7 > index)){
-                            td.setAttribute("class", "canwork")
-                            ++timestart1
-                        }
-                        if(querydataday.data().more == true){
-                            if((timestart2 - 7 == index) && (timeend2 - 7 > index)){
-                                td.setAttribute("class", "canwork")
-                                ++timestart2
-                            }
-                        }
-                    }
-                    else{
-                        td.setAttribute("class", "cantwork")
-                    }
-                    trFemale.appendChild(td)
-                    
-                }
-                tableFemale.appendChild(trFemale)
-            });
+                return td.outerHTML;
+            }).join('');
+
+            return `
+                <tr class="classmember">
+                    <td>${name}</td>
+                    ${tdCells}
+                </tr>
+            `;
+        });
+
+        const rowsHtml = (await Promise.all(schedulesPromises)).join('');
+
+        tableFemale.innerHTML = rowsHtml;
     }
 
     if((querygender == "all") || (querygender == "male")){
         const queryDataMale = await getDocs(collection(db, "Datamale"));
-            queryDataMale.forEach(async (male) => {
-                const trMale = document.createElement("tr")
-                    trMale.setAttribute('class', "classmember")
-                const tdMale = document.createElement("td")
-                    tdMale.textContent = male.data().name
-                trMale.appendChild(tdMale)
 
-                const querydataday = await getDoc(doc(db,"Datamale", male.id, "schedules", queryday ))
-                var timestart1 = 7, timestart2 = 0
-                var timeend1 = 23, timeend2 = 0
+        const schedulesPromises = queryDataMale.docs.map(async (male) => {
+            const data = male.data();
+            const maleId = male.id;
+            const name = data.name;
+            
+            const scheduleDoc = await getDoc(doc(db, "Datamale", maleId, "schedules", queryday));
+            const scheduleData = scheduleDoc.data();
+
+            let timestart1 = 7, timestart2 = 0;
+            let timeend1 = 23, timeend2 = 0;
+
+            if (scheduleData.start1 > 7) timestart1 = scheduleData.start1;
+            if (scheduleData.end1 <= 23) timeend1 = scheduleData.end1 === 0 ? 23 : scheduleData.end1;
+            if (timeend1 < 8) timeend1 = 7;
+            
+            if (scheduleData.more === true) {
+                if (scheduleData.start2 > 7) timestart2 = scheduleData.start2;
+                if (scheduleData.end2 <= 23) timeend2 = scheduleData.end2 === 0 ? 23 : scheduleData.end2;
+                if (timeend2 < 8) timeend2 = 7;
+            }
+
+            const tdCells = Array.from({ length: times }, (_, index) => {
+                const td = document.createElement('td');
                 
-                if(querydataday.data().start1 > 7){
-                    timestart1 = querydataday.data().start1
-                }
-                if(querydataday.data().end1 <= 23){
-                    if(querydataday.data().end1 == 0){
-                        timeend1 = 23
+                if (scheduleData.off === false) {
+                    if ((timestart1 - 7 === index) && (timeend1 - 7 > index)) {
+                        td.setAttribute("class", "canwork");
+                        ++timestart1;
                     }
-                    else{
-                    timeend1 = querydataday.data().end1
-                    }
-                }
-                if(timeend1 <8){
-                    timeend1 = 7
-                }
-                if(querydataday.data().more == true){
-                    if(querydataday.data().start2 > 7){
-                        timestart2 = querydataday.data().start2
-                    }
-                    if(querydataday.data().end2 <= 23){
-                        if(querydataday.data().end2 == 0){
-                            timeend2 = 23
-                        }
-                        else{
-                        timeend2 = querydataday.data().end2
+                    if (scheduleData.more === true) {
+                        if ((timestart2 - 7 === index) && (timeend2 - 7 > index)) {
+                            td.setAttribute("class", "canwork");
+                            ++timestart2;
                         }
                     }
-                    if(timeend2 <8){
-                        timeend2 = 7
-                    }
-
+                } else {
+                    td.setAttribute("class", "cantwork");
                 }
 
-                
-                for (let index = 0; index < times; index++) {
-                    const td = document.createElement('td')
-                    if (querydataday.data().off == false){
-                        if((timestart1 - 7 == index) && (timeend1 - 7 > index)){
-                            td.setAttribute("class", "canwork")
-                            ++timestart1
-                        }
-                        if(querydataday.data().more == true){
-                            if((timestart2 - 7 == index) && (timeend2 - 7 > index)){
-                                td.setAttribute("class", "canwork")
-                                ++timestart2
-                            }
-                        }
-                    }
-                    else{
-                        td.setAttribute("class", "cantwork")
-                    }
-                    trMale.appendChild(td)
-                    
-                }
-                tableMale.appendChild(trMale)
-            });
+                return td.outerHTML;
+            }).join('');
+
+            return `
+                <tr class="classmember">
+                    <td>${name}</td>
+                    ${tdCells}
+                </tr>
+            `;
+        });
+
+        const rowsHtml = (await Promise.all(schedulesPromises)).join('');
+
+        tableMale.innerHTML = rowsHtml;
     }
 }
 
