@@ -75,6 +75,7 @@ async function newFemale(userID, ten){
     for (let index = 0; index < displayDate; index++) {
         await setDoc(doc(db, "Datafemale", userID, "schedules", index.toString()), {
             more: false,
+            off:false,
             start1: 0,
             start2: 0,
             end1: 0,
@@ -99,6 +100,7 @@ async function newMale(userID, ten){
     for (let index = 0; index < displayDate; index++) {
         await setDoc(doc(db, "Datamale", userID, "schedules", index.toString()), {
             more: false,
+            off: false,
             start1: 0,
             start2: 0,
             end1: 0,
@@ -119,7 +121,7 @@ window.createTable = async function createTable(){
             table.setAttribute('id', "table-schedules")
     
         const thead = document.createElement('thead') // Ngày tháng năm
-            thead.setAttribute('class', 'headRow')
+            thead.setAttribute('id', 'headRow')
             const headerRow = document.createElement('tr')
             const headth = document.createElement('th')
                 headth.textContent = 'Ngày'
@@ -130,7 +132,18 @@ window.createTable = async function createTable(){
                     iDate.setDate(currentDate.getDate() + index)
                     const th = document.createElement('th')
                     th.setAttribute("id",index)
-                    th.textContent = iDate.toLocaleDateString()
+                    const dayOfWeek = iDate.getDay()
+                    const dayNames = ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"]
+
+                    const dateDiv = document.createElement('div')                
+                    dateDiv.textContent = iDate.toLocaleDateString()
+
+                    const dayDiv = document.createElement('div')
+                    const em = document.createElement('em')
+                    em.textContent = dayNames[dayOfWeek]
+                    dayDiv.appendChild(em)
+                    th.appendChild(dateDiv)
+                    th.appendChild(dayDiv)
                     headerRow.appendChild(th)
                     
                 }
@@ -145,91 +158,61 @@ window.createTable = async function createTable(){
                 FemaleRow.appendChild(Femaleth)
                 tbodyFemale.appendChild(FemaleRow)
 
-            const getnameFemale = await getDocs(collection(db, "Datafemale"))
-                getnameFemale.forEach(async(docuser) => {
-                    const name = docuser.data().name
-                    const id = docuser.id
-                    const row = document.createElement('tr')
-                        row.setAttribute('id', id)
-                    const th = document.createElement('th')
-                        th.setAttribute('class', "name")
-                        th.textContent = name
-                        const savebuttonF = document.createElement('button')
-                        savebuttonF.textContent = "Lưu"
-                        savebuttonF.setAttribute("id", "B" + "-" + id)
-                        savebuttonF.setAttribute('onclick', "saveschedule(this.id)")
-                    
-                    th.appendChild(savebuttonF)
-                    row.appendChild(th)
-                    
-                    const queryday = await getDocs(collection(doc(db, "Datafemale", id), "schedules"))
-                    queryday.forEach((docday) => {
-                        const date = docday.data()
-                        const th = document.createElement('th')
-                            th.setAttribute("id", id + "-" + docday.id)
+                const getnameFemale = await getDocs(collection(db, "Datafemale"));
+        
+        const schedulesPromisesF = getnameFemale.docs.map(docuser => 
+            getDocs(collection(db, "Datafemale", docuser.id, "schedules"))
+                .then(querySnapshot => ({
+                    id: docuser.id,
+                    name: docuser.data().name,
+                    schedules: querySnapshot.docs.map(docday => ({
+                        id: docday.id,
+                        ...docday.data()
+                    }))
+                }))
+        )
 
-                        const buttonF = document.createElement('button')
-                            buttonF.setAttribute('id',"B-" + docday.id + "-"+ id)
-                            buttonF.setAttribute('onclick', 'changemore(this.id)')
-                        const buttonFoff = document.createElement('button')
-                            buttonFoff.setAttribute("id", "Off" + "-" + docday.id + "-" + id)
-                            buttonFoff.setAttribute('onclick', 'changeoff(this.id)')
+        const schedulesDataF = await Promise.all(schedulesPromisesF)
 
-                        if (date.off == true){
-                            buttonFoff.textContent = "On"
-                            buttonFoff.setAttribute("class", "off")
-                        }
-                        else {
-                            buttonFoff.textContent = "Off"
-                        }
+        const rowsHtmlF = schedulesDataF.map(({ id, name, schedules }) => {
+            const scheduleHtml = schedules.map(({ id: scheduleId, start1, end1, start2, end2, more, off }) => {
+                const buttonFClass = more ? "-" : "+"
+                const buttonFText = more ? "-" : "+"
+                const buttonFOffText = off ? "On" : "Off"
+                const buttonFOffClass = off ? "off" : ""
 
-                        const div1 = document.createElement('div')
+                return `
+                    <th id="${id}-${scheduleId}">
+                        <div>
+                            <input type="time" value="${inttotime(start1)}">
+                            <span> - </span>
+                            <input type="time" value="${inttotime(end1)}">
+                        </div>
+                        ${more ? `
+                            <div>
+                                <input type="time" value="${inttotime(start2)}">
+                                <span> - </span>
+                                <input type="time" value="${inttotime(end2)}">
+                            </div>
+                        ` : ''}
+                        <button id="B-${scheduleId}-${id}" onclick="changemore(this.id)">${buttonFText}</button>
+                        <button id="Off-${scheduleId}-${id}" class="${buttonFOffClass}" onclick="changeoff(this.id)">${buttonFOffText}</button>
+                    </th>
+                `;
+            }).join('');
 
-                        const timestart1 = document.createElement('input')
-                            timestart1.type = "time"
-                            timestart1.setAttribute("value",inttotime(date.start1))
-                        
-                        const separator = document.createTextNode(" - ")
+            return `
+                <tr id="${id}">
+                    <th class="name">
+                        ${name}
+                        <button id="B-${id}" onclick="saveschedule(this.id)">Lưu</button>
+                    </th>
+                    ${scheduleHtml}
+                </tr>
+            `;
+        }).join('');
 
-                        const timeend1 = document.createElement('input')
-                            timeend1.type = "time"
-                            timeend1.setAttribute("value",inttotime(date.end1))
-
-                        div1.appendChild(timestart1)
-                        div1.appendChild(separator)
-                        div1.appendChild(timeend1)
-                        th.appendChild(div1)
-
-                        if(date.more == true){
-                            const div2 = document.createElement('div')
-                            const timestart2 = document.createElement('input')
-                            timestart2.type = "time"
-                            timestart2.setAttribute("value",inttotime(date.start2))
-
-                            const separator = document.createTextNode(" - ")
-
-                            const timeend2 = document.createElement('input')
-                            timeend2.type = "time"
-                            timeend2.setAttribute("value",inttotime(date.end2))
-
-                            buttonF.textContent = "-"
-
-                        div2.appendChild(timestart2)
-                        div2.appendChild(separator)
-                        div2.appendChild(timeend2)
-
-                        th.appendChild(div2)
-                        } else{
-                            buttonF.textContent = "+"
-                        }
-                   
-                    th.appendChild(buttonF)
-                    th.appendChild(buttonFoff)
-                    row.appendChild(th)
-                    })
-                    
-                    tbodyFemale.appendChild(row)
-                  })
+                tbodyFemale.innerHTML = rowsHtmlF;
     
                 
     
@@ -244,92 +227,60 @@ window.createTable = async function createTable(){
                 MaleRow.appendChild(Maleth)
                 tbodyMale.appendChild(MaleRow)
 
-            const getnameMale = await getDocs(collection(db, "Datamale"))
-            getnameMale.forEach(async(docuser) => {
-                const name = docuser.data().name
-                const id = docuser.id
-                const row = document.createElement('tr')
-                    row.setAttribute('id', id)
-                const th = document.createElement('th')
-                    th.setAttribute('class', "name")
-                    th.textContent = name
-                    const savebuttonF = document.createElement('button')
-                    savebuttonF.textContent = "Lưu"
-                    savebuttonF.setAttribute("id", "B" + "-" + id)
-                    savebuttonF.setAttribute('onclick', "saveschedule(this.id)")
-                
-                th.appendChild(savebuttonF)
-                row.appendChild(th)
-                
-                const queryday = await getDocs(collection(doc(db, "Datamale", id), "schedules"))
-                queryday.forEach((docday) => {
-                    const date = docday.data()
-                    const th = document.createElement('th')
-                        th.setAttribute("id", id + "-" + docday.id)
-
-                    const buttonF = document.createElement('button')
-                        buttonF.setAttribute('id',"B-" + docday.id + "-"+ id)
-                        buttonF.setAttribute('onclick', 'changemore(this.id)')
-                    const buttonMoff = document.createElement('button')
-                    buttonMoff.setAttribute("id", "Off" + "-"+ docday.id + "-" + id)
-                    buttonMoff.setAttribute('onclick', 'changeoff(this.id)')
-
-                    if (date.off == true){
-                        buttonMoff.textContent = "On"
-                        buttonMoff.setAttribute("class", "off")
-                    }
-                    else {
-                        buttonMoff.textContent = "Off"
-                    }
-
-                    const div1 = document.createElement('div')
-
-                    const timestart1 = document.createElement('input')
-                        timestart1.type = "time"
-                        timestart1.setAttribute("value",inttotime(date.start1))
-                    
-                    const separator = document.createTextNode(" - ")
-
-                    const timeend1 = document.createElement('input')
-                        timeend1.type = "time"
-                        timeend1.setAttribute("value",inttotime(date.end1))
-
-                    div1.appendChild(timestart1)
-                    div1.appendChild(separator)
-                    div1.appendChild(timeend1)
-                    th.appendChild(div1)
-
-                    if(date.more == true){
-                        const div2 = document.createElement('div')
-                        const timestart2 = document.createElement('input')
-                        timestart2.type = "time"
-                        timestart2.setAttribute("value",inttotime(date.start2))
-
-                        const separator = document.createTextNode(" - ")
-
-                        const timeend2 = document.createElement('input')
-                        timeend2.type = "time"
-                        timeend2.setAttribute("value",inttotime(date.end2))
-
-                        buttonF.textContent = "-"
-
-                    div2.appendChild(timestart2)
-                    div2.appendChild(separator)
-                    div2.appendChild(timeend2)
-
-                    th.appendChild(div2)
-                    } else{
-                        buttonF.textContent = "+"
-                    }
-
-                
-                th.appendChild(buttonF)
-                th.appendChild(buttonMoff)
-                row.appendChild(th)
-                })
-                tbodyMale.appendChild(row)
-                })
-    
+                const getnameMale = await getDocs(collection(db, "Datamale"));
+                const schedulesPromisesM = getnameMale.docs.map(docuser => 
+                    getDocs(collection(db, "Datamale", docuser.id, "schedules"))
+                        .then(querySnapshot => ({
+                            id: docuser.id,
+                            name: docuser.data().name,
+                            schedules: querySnapshot.docs.map(docday => ({
+                                id: docday.id,
+                                ...docday.data()
+                            }))
+                        }))
+                );
+        
+                const schedulesDataM = await Promise.all(schedulesPromisesM);
+        
+                const rowsHtmlM = schedulesDataM.map(({ id, name, schedules }) => {
+                    const scheduleHtml = schedules.map(({ id: scheduleId, start1, end1, start2, end2, more, off }) => {
+                        const buttonFClass = more ? "-" : "+"
+                        const buttonFText = more ? "-" : "+"
+                        const buttonFOffText = off ? "On" : "Off"
+                        const buttonFOffClass = off ? "off" : ""
+        
+                        return `
+                            <th id="${id}-${scheduleId}">
+                                <div>
+                                    <input type="time" value="${inttotime(start1)}">
+                                    <span> - </span>
+                                    <input type="time" value="${inttotime(end1)}">
+                                </div>
+                                ${more ? `
+                                    <div>
+                                        <input type="time" value="${inttotime(start2)}">
+                                        <span> - </span>
+                                        <input type="time" value="${inttotime(end2)}">
+                                    </div>
+                                ` : ''}
+                                <button id="B-${scheduleId}-${id}" onclick="changemore(this.id)">${buttonFText}</button>
+                                <button id="Off-${scheduleId}-${id}" class="${buttonFOffClass}" onclick="changeoff(this.id)">${buttonFOffText}</button>
+                            </th>
+                        `;
+                    }).join('');
+        
+                    return `
+                        <tr id="${id}">
+                            <th class="name">
+                                ${name}
+                                <button id="B-${id}" onclick="saveschedule(this.id)">Lưu</button>
+                            </th>
+                            ${scheduleHtml}
+                        </tr>
+                    `;
+                }).join('');
+        
+                tbodyMale.innerHTML = rowsHtmlM
             
     
         thead.appendChild(headerRow)
@@ -364,22 +315,22 @@ window.changemore = async function changemore(buttonid){
 
     const querydays = await getDocs(collection(doc(db, checkFM, info[2]), "schedules"))
     const getday = querydays.docs[info[1]]
-    console.log(getday.id)
 
 
     if (getday.data().more == true){
-        but.textContent = "+"
+         but.textContent = "+"
         await updateDoc(doc(db, checkFM, info[2], "schedules", getday.id),{
             more : false
-        })        
+        })
+       
     }
     else {
         but.textContent = "-"
         await updateDoc(doc(db, checkFM, info[2], "schedules", getday.id), {
             more : true
         })
-            }
-    location.reload()
+        
+    }
 }
 
 window.saveschedule = async function saveschedule(saveid){
@@ -395,7 +346,7 @@ window.saveschedule = async function saveschedule(saveid){
         const dayschedule = document.getElementById(sid[1] + "-" + index)
         const input = dayschedule.getElementsByTagName("input")
         if(input.length < 3){
-            console.log(dayschedule)
+
             await updateDoc(doc(db, checkFM, sid[1], "schedules", index.toString()),{
                 start1 : timetoint(input[0].value),
                 end1 : timetoint(input[1].value)
@@ -414,6 +365,7 @@ window.saveschedule = async function saveschedule(saveid){
     const name = await getDoc(doc(db, checkFM, sid[1]))
     alert("Đã lưu lịch làm của " + name.data().name)
 }
+
 window.changeoff = async function changeoff(buttonID) {
     var info = buttonID.split('-')
     const but = document.getElementById(buttonID)
@@ -443,5 +395,4 @@ window.changeoff = async function changeoff(buttonID) {
         })
         
     }
-    location.reload()
 }
