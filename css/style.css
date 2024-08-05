@@ -67,6 +67,9 @@ body {
     background-color: #f4f4f4;
     font-weight: bold;
 }
+#table-schedules thead em {
+    font-weight: normal;
+}
 
 #table-schedules th {
     border: 1px solid #ddd;
