@@ -212,7 +212,7 @@ window.createTable = async function createTable(){
             `;
         }).join('');
 
-                tbodyFemale.innerHTML = rowsHtmlF;
+                tbodyFemale.innerHTML += rowsHtmlF;
     
                 
     
@@ -280,7 +280,7 @@ window.createTable = async function createTable(){
                     `;
                 }).join('');
         
-                tbodyMale.innerHTML = rowsHtmlM
+                tbodyMale.innerHTML += rowsHtmlM
             
     
         thead.appendChild(headerRow)
