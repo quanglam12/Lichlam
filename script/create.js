@@ -219,3 +219,16 @@ function formatDate(dateString) {
 
     return `${day}/${month}/${year}`
 }
+const minisize = document.getElementById("minisize")
+
+minisize.onclick = function() {
+    const dis = document.getElementById("displaycreate")
+    if(dis.style.display === "none"){
+        dis.style.display = "block"
+        minisize.innerHTML = `&minus;`
+    }
+    else {
+        dis.style.display = "none"
+        minisize.innerHTML = "&lArr;"
+    }
+}
