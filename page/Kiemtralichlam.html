@@ -63,12 +63,13 @@
                 <button onclick="queryclick()">Xác nhận</button>
             </div>
         </div>
+    <div class = "container">
         <div id="schedule-container">
             <div class ="tabdays" id ="tabdays">
                 
             </div>
             <div class= 'timeline'>
-                <table>
+                <table id ="tableschedules">
                     <thead>
                         <tr>
                             <th>Giờ</th>
@@ -95,7 +96,6 @@
                         <tr>
                             <th colspan="18">Female</th>
                         </tr>
-
                     </tbody>
                     <tbody id ="tableMale">
                         <tr>
@@ -105,13 +105,28 @@
                 </table>
             </div>
         </div>
+        <div class="createshedules" >
+            <h3>Tạo lịch làm ngày <input type ="date" id ="dayschedule"></h3>
+            <button id ="createBtn">Chế độ</button>
+            <div id = "createmode"></div>
+            
+            <div id ="createshedules"></div>
+            <button id="openModalBtn">Xuất</button>
+        </div>
+    </div>
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span id="close" class="close">&times;</span>
+            <div id = "displayschedule">
+
+            </div>
+        </div>
+    </div>
     </main>
     
 </body>
 
-  <script type="module" src="../script/manager.js"></script>
-  <script>
-
-  </script>
+    <script type="module" src="../script/manager.js"></script>
+    <script src="../script/create.js"></script>
 
 </html>
