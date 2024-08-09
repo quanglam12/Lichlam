@@ -308,3 +308,17 @@ filter: invert(50%);
     border: 1px solid #ddd;
     border-radius: 4px;
 }
+.minisize {
+    display: block;
+    color: #888888;
+    float: right;
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.minisize:hover,
+.minisize:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
