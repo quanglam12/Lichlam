@@ -154,4 +154,157 @@ td {
     padding: 5px 0px 5px 0px;
 
 }
+.container {
+    display: flex;
+    justify-content: space-between;
+}
+.createshedules {
+    max-width: 28%;
+    padding: 10px;
+    border-radius: 8px;
+    position: fixed;
+    right: 0;
+    top: 60;
+    background-color: #e0e0e0;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+}
+.createshedules h3 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
 
+.createshedules button {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 5px 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.createshedules button:hover {
+    background-color: #d0d0d0;
+}
+
+.createshedules div.modeperson, .createshedules div.modetime {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.createshedules div.modeperson p, .createshedules div.modetime p {
+    margin: 0;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.createshedules input[type="number"] {
+    width: 50px;
+    margin-right: 5px;
+    padding: 3px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.createshedules .modeperson button, .createshedules .modetime button {
+    padding: 3px 10px;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+    color: #721c24;
+    cursor: pointer;
+}
+
+.createshedules .modeperson button:hover, .createshedules .modetime button:hover {
+    background-color: #f5c6cb;
+}
+
+.createshedules .modetime p {
+    flex-grow: 1;
+}
+input[type='date'] {
+    background-color: #fff;
+    color: #444;
+    border: 2px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input[type='date']:focus {
+border-color: #0056b3;
+box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+input[type='date']::-webkit-calendar-picker-indicator {
+filter: invert(50%);
+}
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; 
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; 
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 8px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+#displayschedule {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+#displayschedule h3 {
+    grid-column: span 2;
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+#displayschedule div {
+    margin: 0;
+}
+
+#displayschedule p {
+    margin: 0;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
